@@ -4,25 +4,44 @@ using System.Collections;
 public class Force : MonoBehaviour {
 
 	public float moveSpeed = 5;
-	bool isAlreadyClicked = false;
+	public static bool isAlreadyClicked = false;
+	//private Rigidbody2D rb;
 
-	/*void Start() 
+	//private static float v;
+
+	void Start() 
     {
-        //rb = GetComponent<Rigidbody>();
+		//isAlreadyClicked = false;
+		//rb = GetComponent<Rigidbody2D>();
+	   Reset();
+		//moveSpeed = 5;
+		//rb = GetComponent<Rigidbody>();
+		//rb = GetComponent<Rigidbody2D>();
 		//GetComponent<Rigidbody2D>().AddForce (Vector2, ForceMode2D.Impulse);
 		//GetComponent<Rigidbody2D>().AddForce(new Vector2(moveSpeed,0));
-    }*/
+    }
 
 	void Update()
 	{
 		if(Input.GetMouseButton(1))
 		{
+			
 			if(!isAlreadyClicked)
 			{
 				//gameObject.GetComponent<Rigidbody2D>().AddForce (Vector2, ForceMode2D.Impulse);
 				GetComponent<Rigidbody2D>().AddForce(new Vector2(moveSpeed,0));
-			}
-			isAlreadyClicked = true;	
+				//v = BallCondition.rb.velocity;
+				//Debug.Log(BallCondition.rb.velocity);
+				Debug.Log("clicked");
+				isAlreadyClicked = true;
+				//BallCondition player = GetComponent<BallCondition>();
+				//StartCoroutine(player.Restart());		
+			}		
 		}
+		
+	}
+	public void Reset()
+	{
+		isAlreadyClicked = false;
 	}
 }
