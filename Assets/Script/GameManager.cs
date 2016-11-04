@@ -1,16 +1,25 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
-using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour {
 
 	// Use this for initialization
+	public Canvas levelCanvas;
+	public Canvas menuCanvas;
+
+	void Start()
+	{
+		levelCanvas.enabled = false;
+		menuCanvas.enabled = true;
+	}
 	
 	public void StartLevel()
 	{
 		Debug.Log("clicked");
-		SceneManager.LoadScene(1);
+		levelCanvas.enabled = true;
+		menuCanvas.enabled = false;
+		//SceneManager.LoadScene(1);
 	}
 	public void ExitGame()
 	{
