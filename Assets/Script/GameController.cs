@@ -10,6 +10,7 @@ public class GameController : MonoBehaviour {
 	public Button pauseButton;
 	public GameObject ball;
 	public bool isAlreadyClicked = false;
+	public bool active = false;
 	public Rigidbody2D rb;
 
 
@@ -21,10 +22,34 @@ public class GameController : MonoBehaviour {
 		rb = ball.gameObject.GetComponentInChildren<Rigidbody2D>();
 		startCanvas.gameObject.transform.GetChild(0).gameObject.transform.GetChild(0).gameObject.GetComponent<Text>().enabled = true;
 		pauseButton.gameObject.SetActive(false);
+		//ToggleableItem sp = parentObject.FindComponentInChildWithTag<BoxCollider2D>("LiquidColor");
 		startCanvas.gameObject.transform.GetChild(2).gameObject.SetActive(false);
 		startCanvas.gameObject.transform.GetChild(0).gameObject.transform.GetChild(1).gameObject.GetComponent<Text>().enabled = false;
+		foreach (GameObject gameObject in GameObject.FindGameObjectsWithTag("Platform"))
+		{
+			gameObject.GetComponent<BoxCollider2D>().enabled = false;
+		}
+		//GameObject.FindGameObjectWithTag("Platform").GetComponent<BoxCollider2D>().enabled = false;
+		//foreach (Transform child in parentTransform) if (child.CompareTag("Zone")) {} 
 		Time.timeScale = 0.0f;
     }
+	/*public void OnCollider2D()
+	{
+		GameObject parent = GameObject.FindGameObjectWithTag("Level");
+		for (int i = 0; i < parent.transform.childCount; i++)
+		{
+			if(parent.transform.GetChild(i).childCount > 0)
+			{
+				for(int x = 0; x < parent.transform.GetChild(i).childCount; x++)
+				{
+					if(parent.transform.GetChild(i).GetChild(x).transform.tag == "Platform")
+					{
+						parent.transform.GetChild(i).GetChild(x).gameObject.GetComponent<BoxCollider2D>().enabled = false;
+					}
+				}
+			}
+		}
+	}*/
 	public void OnCollisionEnter2D(Collision2D coll)
 	{
 		if(coll.gameObject.tag == "Goal")
@@ -37,6 +62,10 @@ public class GameController : MonoBehaviour {
 			startCanvas.gameObject.transform.GetChild(0).gameObject.SetActive(true);
 		    startCanvas.gameObject.transform.GetChild(0).gameObject.transform.GetChild(0).gameObject.GetComponent<Text>().enabled = false;
 			startCanvas.gameObject.transform.GetChild(0).gameObject.transform.GetChild(1).gameObject.GetComponent<Text>().enabled = true;
+			foreach (GameObject gameObject in GameObject.FindGameObjectsWithTag("Platform"))
+			{
+				gameObject.GetComponent<BoxCollider2D>().enabled = false;
+			}
 		}
 	}
 	public void NextLevel()
@@ -57,6 +86,11 @@ public class GameController : MonoBehaviour {
 			startCanvas.gameObject.transform.GetChild(0).gameObject.SetActive(false);
 			pauseButton.gameObject.SetActive(true);
 			Time.timeScale = 1.0f;
+			foreach (GameObject gameObject in GameObject.FindGameObjectsWithTag("Platform"))
+			{
+				gameObject.GetComponent<BoxCollider2D>().enabled = true;
+			}
+			//OnCollider2D();
 			StartCoroutine(Restart());		
 		}		
 	}
@@ -81,6 +115,10 @@ public class GameController : MonoBehaviour {
 		pauseButton.gameObject.SetActive(false);
 		startCanvas.gameObject.transform.GetChild(2).gameObject.SetActive(true);
 		Time.timeScale =  0.0f;
+		foreach (GameObject gameObject in GameObject.FindGameObjectsWithTag("Platform"))
+		{
+			gameObject.GetComponent<BoxCollider2D>().enabled = false;
+		}
 		Debug.Log("pause");
 	}
 	public void ResumeGame()
@@ -88,6 +126,10 @@ public class GameController : MonoBehaviour {
 		pauseButton.gameObject.SetActive(true);
 		startCanvas.gameObject.transform.GetChild(2).gameObject.SetActive(false);
 		Time.timeScale = 1.0f;
+		foreach (GameObject gameObject in GameObject.FindGameObjectsWithTag("Platform"))
+		{
+			gameObject.GetComponent<BoxCollider2D>().enabled = true;
+		}
 		Debug.Log("resumed");
 	}
 }
