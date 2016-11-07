@@ -21,6 +21,13 @@ public class GameManager : MonoBehaviour {
 		menuCanvas.enabled = false;
 		//SceneManager.LoadScene(1);
 	}
+	public void BackButton()
+	{
+		Debug.Log("clicked");
+		levelCanvas.enabled = false;
+		menuCanvas.enabled = true;
+		//SceneManager.LoadScene(1);
+	}
 	public void ExitGame()
 	{
 		Debug.Log("exit");
