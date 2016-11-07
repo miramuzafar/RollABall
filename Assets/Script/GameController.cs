@@ -132,4 +132,8 @@ public class GameController : MonoBehaviour {
 		}
 		Debug.Log("resumed");
 	}
+	public void Home()
+	{
+		SceneManager.LoadScene(0);
+	}
 }
