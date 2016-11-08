@@ -12,13 +12,13 @@ public class SettingsManager : MonoBehaviour {
 	void OnEnable()
 	{
 		gameSettings = new GameSettings();
-		audioEnabled.onValueChanged.AddListener(delegate{AudioEnabledToggle();});
+		audioEnabled.onValueChanged.AddListener(delegate{AudioDisabledToggle();});
 		applyButton.onClick.AddListener(delegate{OnApplyButtonClick();});
 		LoadSettings();
 	}
-	public void AudioEnabledToggle()
+	public void AudioDisabledToggle()
 	{
-		gameSettings.audioEnabled = AudioListener.pause = audioEnabled.isOn;
+		gameSettings.audioEnabled = AudioListener.pause = !audioEnabled.isOn;
 	}
 	public void OnApplyButtonClick()
 	{
@@ -28,11 +28,13 @@ public class SettingsManager : MonoBehaviour {
 	{
 		string jsonData = JsonUtility.ToJson(gameSettings, true);
 		File.WriteAllText(Application.persistentDataPath + "/gameSettings.json", jsonData);
+		Debug.Log("Saved");
 	}
 	public void LoadSettings()
 	{
 		File.ReadAllText(Application.persistentDataPath + "/gameSettings.json");
         gameSettings = JsonUtility.FromJson<GameSettings>(File.ReadAllText(Application.persistentDataPath + "/gameSettings.json")); 
-		audioEnabled.isOn = gameSettings.audioEnabled;
+		audioEnabled.isOn = !gameSettings.audioEnabled;
+		Debug.Log("Loaded");
 	}
 }
