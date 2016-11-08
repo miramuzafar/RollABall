@@ -76,13 +76,13 @@ public class GameController : MonoBehaviour {
 			SceneManager.LoadScene(0);
 		}
 	}
-	public void OnMouseDown()
+	public void OnMouse()
 	{
 		if(!isAlreadyClicked)
 		{
 			rb.AddForce(new Vector2(moveSpeed,0));
-			Debug.Log("mousedown");
 			isAlreadyClicked = true;
+			Debug.Log("mousedown");
 			startCanvas.gameObject.transform.GetChild(0).gameObject.SetActive(false);
 			pauseButton.gameObject.SetActive(true);
 			Time.timeScale = 1.0f;
@@ -90,9 +90,8 @@ public class GameController : MonoBehaviour {
 			{
 				gameObject.GetComponent<BoxCollider2D>().enabled = true;
 			}
-			//OnCollider2D();
 			StartCoroutine(Restart());		
-		}		
+		}
 	}
 	public IEnumerator Restart() 
 	{
