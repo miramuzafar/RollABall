@@ -12,6 +12,7 @@ public class GameManager : MonoBehaviour {
 	{
 		levelCanvas.enabled = false;
 		menuCanvas.enabled = true;
+		menuCanvas.gameObject.transform.GetChild(4).gameObject.SetActive(false);
 	}
 	
 	public void StartLevel()
@@ -32,5 +33,9 @@ public class GameManager : MonoBehaviour {
 	{
 		Debug.Log("exit");
 		Application.Quit ();
+	}
+	public void Settings()
+	{
+		menuCanvas.gameObject.transform.GetChild(4).gameObject.SetActive(true);
 	}
 }
