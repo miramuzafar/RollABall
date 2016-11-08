@@ -8,6 +8,7 @@ public class SettingsManager : MonoBehaviour {
 	// Use this for initialization
 	public Toggle audioEnabled;
 	public GameSettings gameSettings;
+	public Canvas settingsCanvas;
 	public Button applyButton;
 	void OnEnable()
 	{
@@ -23,6 +24,7 @@ public class SettingsManager : MonoBehaviour {
 	public void OnApplyButtonClick()
 	{
 		SaveSettings();
+		settingsCanvas.transform.GetChild(4).gameObject.SetActive(false);
 	}
 	public void SaveSettings()
 	{
