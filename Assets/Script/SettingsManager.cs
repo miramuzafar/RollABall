@@ -2,6 +2,7 @@
 using System.Collections;
 using UnityEngine.UI;
 using System.IO;
+using UnityEngine.SceneManagement;
 
 public class SettingsManager : MonoBehaviour {
 
@@ -24,7 +25,10 @@ public class SettingsManager : MonoBehaviour {
 	public void OnApplyButtonClick()
 	{
 		SaveSettings();
-		settingsCanvas.transform.GetChild(4).gameObject.SetActive(false);
+		foreach (GameObject gameObject in GameObject.FindGameObjectsWithTag("Settings"))
+		{
+			gameObject.SetActive(false);
+		}
 	}
 	public void SaveSettings()
 	{
