@@ -12,44 +12,25 @@ public class GameController : MonoBehaviour {
 	public bool isAlreadyClicked = false;
 	public bool active = false;
 	public Rigidbody2D rb;
+	//AudioSource buttonSound;
 
 
 	void Start() 
     {
 		Debug.Log("restart");
 		startCanvas.enabled = true;
-		ball = GameObject.Find("Ball");
+		ball = GameObject.FindGameObjectWithTag("Ball");
 		rb = ball.gameObject.GetComponentInChildren<Rigidbody2D>();
 		startCanvas.gameObject.transform.GetChild(0).gameObject.transform.GetChild(0).gameObject.GetComponent<Text>().enabled = true;
 		pauseButton.gameObject.SetActive(false);
-		//ToggleableItem sp = parentObject.FindComponentInChildWithTag<BoxCollider2D>("LiquidColor");
 		startCanvas.gameObject.transform.GetChild(2).gameObject.SetActive(false);
 		startCanvas.gameObject.transform.GetChild(0).gameObject.transform.GetChild(1).gameObject.GetComponent<Text>().enabled = false;
 		foreach (GameObject gameObject in GameObject.FindGameObjectsWithTag("Platform"))
 		{
 			gameObject.GetComponent<BoxCollider2D>().enabled = false;
 		}
-		//GameObject.FindGameObjectWithTag("Platform").GetComponent<BoxCollider2D>().enabled = false;
-		//foreach (Transform child in parentTransform) if (child.CompareTag("Zone")) {} 
 		Time.timeScale = 0.0f;
     }
-	/*public void OnCollider2D()
-	{
-		GameObject parent = GameObject.FindGameObjectWithTag("Level");
-		for (int i = 0; i < parent.transform.childCount; i++)
-		{
-			if(parent.transform.GetChild(i).childCount > 0)
-			{
-				for(int x = 0; x < parent.transform.GetChild(i).childCount; x++)
-				{
-					if(parent.transform.GetChild(i).GetChild(x).transform.tag == "Platform")
-					{
-						parent.transform.GetChild(i).GetChild(x).gameObject.GetComponent<BoxCollider2D>().enabled = false;
-					}
-				}
-			}
-		}
-	}*/
 	public void OnCollisionEnter2D(Collision2D coll)
 	{
 		if(coll.gameObject.tag == "Goal")
@@ -70,14 +51,16 @@ public class GameController : MonoBehaviour {
 	}
 	public void NextLevel()
 	{
+		GetComponent<AudioSource>().Play();
 		if(startCanvas.gameObject.transform.GetChild(0).gameObject.transform.GetChild(1).gameObject.GetComponent<Text>().enabled == true)
 		{
-			startCanvas.gameObject.SetActive(false);
+			//startCanvas.gameObject.SetActive(false);
 			SceneManager.LoadScene(0);
 		}
 	}
 	public void OnMouse()
 	{
+		GetComponent<AudioSource>().Play();
 		if(!isAlreadyClicked)
 		{
 			rb.AddForce(new Vector2(moveSpeed,0));
@@ -111,8 +94,10 @@ public class GameController : MonoBehaviour {
 	}
 	public void PauseGame()
 	{
+		GetComponent<AudioSource>().Play();
 		pauseButton.gameObject.SetActive(false);
 		startCanvas.gameObject.transform.GetChild(2).gameObject.SetActive(true);
+		startCanvas.gameObject.transform.GetChild(2).gameObject.transform.GetChild(2).gameObject.transform.GetChild(1).gameObject.SetActive(false);
 		Time.timeScale =  0.0f;
 		foreach (GameObject gameObject in GameObject.FindGameObjectsWithTag("Platform"))
 		{
@@ -122,6 +107,7 @@ public class GameController : MonoBehaviour {
 	}
 	public void ResumeGame()
 	{
+		GetComponent<AudioSource>().Play();
 		pauseButton.gameObject.SetActive(true);
 		startCanvas.gameObject.transform.GetChild(2).gameObject.SetActive(false);
 		Time.timeScale = 1.0f;
@@ -133,6 +119,13 @@ public class GameController : MonoBehaviour {
 	}
 	public void Home()
 	{
+		GetComponent<AudioSource>().Play();
 		SceneManager.LoadScene(0);
+	}
+
+	public void Settings()
+	{
+		GetComponent<AudioSource>().Play();
+		startCanvas.gameObject.transform.GetChild(2).gameObject.transform.GetChild(2).gameObject.transform.GetChild(1).gameObject.SetActive(true);
 	}
 }
