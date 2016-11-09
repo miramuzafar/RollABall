@@ -25,6 +25,7 @@ public class ToggleableContainer : MonoBehaviour {
             _currentSelection.gameObject.SetActive(true);
 
         if(target != null)
+        GetComponentInChildren<AudioSource>().Play();
             target.gameObject.SetActive(false);
 
         _currentSelection = target;
