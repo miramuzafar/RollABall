@@ -19,6 +19,7 @@ public class LevelManager : MonoBehaviour {
 	public List<Level> LevelList;
 	public Transform spacer;
 	public GameObject levelButton;
+	public AudioSource button;
 	void Start () 
 	{
 		//DeleteAll();
@@ -80,6 +81,8 @@ public class LevelManager : MonoBehaviour {
 	}
 	void Levels()
 	{
+		button.gameObject.GetComponent<AudioSource>().Play();
 		SceneManager.LoadScene(1);
+
 	}
 }
