@@ -9,10 +9,12 @@ public class GameController : MonoBehaviour {
 	public Canvas startCanvas;
 	public Button pauseButton;
 	public GameObject ball;
+	public GameObject goal;
 	public bool isAlreadyClicked = false;
 	public bool active = false;
 	public Rigidbody2D rb;
 	public AudioSource bounce;
+	public AudioSource win;
 	//AudioSource buttonSound;
 
 
@@ -21,6 +23,7 @@ public class GameController : MonoBehaviour {
 		Debug.Log("restart");
 		startCanvas.enabled = true;
 		ball = GameObject.FindGameObjectWithTag("Ball");
+		win = goal.gameObject.GetComponentInChildren<AudioSource>();
 		//bounce.isReadyToPlay();
 		rb = ball.gameObject.GetComponentInChildren<Rigidbody2D>();
 		bounce = ball.gameObject.GetComponentInChildren<AudioSource>();
@@ -43,6 +46,7 @@ public class GameController : MonoBehaviour {
 		}
 		if(coll.gameObject.tag == "Goal")
 		{
+			win.Play();
 			Debug.Log("Level Complete");
 			Time.timeScale = 0.0f;
 			GameObject tempObject = GameObject.Find("StartGame");
