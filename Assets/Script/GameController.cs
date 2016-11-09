@@ -12,6 +12,7 @@ public class GameController : MonoBehaviour {
 	public bool isAlreadyClicked = false;
 	public bool active = false;
 	public Rigidbody2D rb;
+	public AudioSource bounce;
 	//AudioSource buttonSound;
 
 
@@ -20,7 +21,9 @@ public class GameController : MonoBehaviour {
 		Debug.Log("restart");
 		startCanvas.enabled = true;
 		ball = GameObject.FindGameObjectWithTag("Ball");
+		//bounce.isReadyToPlay();
 		rb = ball.gameObject.GetComponentInChildren<Rigidbody2D>();
+		bounce = ball.gameObject.GetComponentInChildren<AudioSource>();
 		startCanvas.gameObject.transform.GetChild(0).gameObject.transform.GetChild(0).gameObject.GetComponent<Text>().enabled = true;
 		pauseButton.gameObject.SetActive(false);
 		startCanvas.gameObject.transform.GetChild(2).gameObject.SetActive(false);
@@ -33,6 +36,11 @@ public class GameController : MonoBehaviour {
     }
 	public void OnCollisionEnter2D(Collision2D coll)
 	{
+		if(coll.gameObject.tag == "Platform")
+		{
+			if (coll.relativeVelocity.magnitude > 0.2)
+            bounce.Play();
+		}
 		if(coll.gameObject.tag == "Goal")
 		{
 			Debug.Log("Level Complete");
