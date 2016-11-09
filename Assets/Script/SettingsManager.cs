@@ -27,6 +27,7 @@ public class SettingsManager : MonoBehaviour {
 		SaveSettings();
 		foreach (GameObject gameObject in GameObject.FindGameObjectsWithTag("Settings"))
 		{
+			GetComponent<AudioSource>().Play();
 			gameObject.SetActive(false);
 		}
 	}

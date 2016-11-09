@@ -17,6 +17,7 @@ public class GameManager : MonoBehaviour {
 	
 	public void StartLevel()
 	{
+		GetComponent<AudioSource>().Play();
 		Debug.Log("clicked");
 		levelCanvas.enabled = true;
 		menuCanvas.enabled = false;
@@ -24,6 +25,7 @@ public class GameManager : MonoBehaviour {
 	}
 	public void BackButton()
 	{
+		GetComponent<AudioSource>().Play();
 		Debug.Log("clicked");
 		levelCanvas.enabled = false;
 		menuCanvas.enabled = true;
@@ -31,11 +33,13 @@ public class GameManager : MonoBehaviour {
 	}
 	public void ExitGame()
 	{
+		GetComponent<AudioSource>().Play();
 		Debug.Log("exit");
 		Application.Quit ();
 	}
 	public void Settings()
 	{
+		GetComponent<AudioSource>().Play();
 		menuCanvas.gameObject.transform.GetChild(4).gameObject.SetActive(true);
 	}
 }
