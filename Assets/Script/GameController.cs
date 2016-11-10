@@ -2,10 +2,13 @@
 using UnityEngine.UI;
 using System.Collections;
 using UnityEngine.SceneManagement;
+using System.IO;
 
 public class GameController : MonoBehaviour {
 
-	public float moveSpeed = 5;
+	float moveSpeed = 40;
+	public GameSettings gameSettings;
+	//public int index;
 	public Canvas startCanvas;
 	public Button pauseButton;
 	public GameObject ball;
@@ -24,7 +27,6 @@ public class GameController : MonoBehaviour {
 		startCanvas.enabled = true;
 		ball = GameObject.FindGameObjectWithTag("Ball");
 		win = goal.gameObject.GetComponentInChildren<AudioSource>();
-		//bounce.isReadyToPlay();
 		rb = ball.gameObject.GetComponentInChildren<Rigidbody2D>();
 		bounce = ball.gameObject.GetComponentInChildren<AudioSource>();
 		startCanvas.gameObject.transform.GetChild(0).gameObject.transform.GetChild(0).gameObject.GetComponent<Text>().enabled = true;
@@ -66,7 +68,7 @@ public class GameController : MonoBehaviour {
 		GetComponent<AudioSource>().Play();
 		if(startCanvas.gameObject.transform.GetChild(0).gameObject.transform.GetChild(1).gameObject.GetComponent<Text>().enabled == true)
 		{
-			//startCanvas.gameObject.SetActive(false);
+			GameSettings.index=+1;
 			SceneManager.LoadScene(0);
 		}
 	}
@@ -75,7 +77,8 @@ public class GameController : MonoBehaviour {
 		GetComponent<AudioSource>().Play();
 		if(!isAlreadyClicked)
 		{
-			rb.AddForce(new Vector2(moveSpeed,0));
+			//rb.AddForce(new Vector2(moveSpeed,10));
+			rb.AddRelativeForce(new Vector2(moveSpeed,-150));
 			isAlreadyClicked = true;
 			Debug.Log("mousedown");
 			startCanvas.gameObject.transform.GetChild(0).gameObject.SetActive(false);
@@ -99,7 +102,7 @@ public class GameController : MonoBehaviour {
         	{
             	yield return new WaitForSeconds(2);
             	Debug.Log("lose");
-            	SceneManager.LoadScene(1);
+            	SceneManager.LoadScene(SceneManager.GetActiveScene().name);
 				Debug.Log("reset");	
         	}
     	}
