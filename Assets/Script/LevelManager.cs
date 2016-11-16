@@ -41,8 +41,8 @@ public class LevelManager : MonoBehaviour {
 			}
 			button.unlocked = level.unlocked;
 			button.GetComponent<Button>().interactable = level.isInteractable;
-			Loader.currentLevel = PlayerPrefs.GetInt("Level " + button.levelText.text, button.unlocked);
-			button.GetComponent<Button>().onClick.AddListener(() => Levels());
+			//Loader.currentLevel = PlayerPrefs.GetInt("Level " + button.levelText.text, button.unlocked);
+			button.GetComponent<Button>().onClick.AddListener(() => Levels("Level " + button.levelText.text));
 			/*if(PlayerPrefs.GetInt("Level " + button.levelText.text + "_score") > 0 )
 			{
 				button.star1.SetActive(true);
@@ -61,28 +61,28 @@ public class LevelManager : MonoBehaviour {
 	}
 	void SaveAll()
 	{
-		if(PlayerPrefs.HasKey("Level 1"))
-		{
-			return;
-		}
-		else
-		{
+		//if(PlayerPrefs.HasKey("Level 1"))
+		//{
+			//return;
+		//}
+		//else
+		//{
 			GameObject[] allButtons = GameObject.FindGameObjectsWithTag("LevelButton");
 			foreach (GameObject buttons in allButtons)
 			{
 				LevelButton button = buttons.GetComponent<LevelButton>();
-				PlayerPrefs.GetInt("Level " + button.levelText.text, button.unlocked);
+				PlayerPrefs.SetInt("Level " + button.levelText.text, button.unlocked);
 			}
-		}
+		//}
 	}
 	void DeleteAll()
 	{
 		PlayerPrefs.DeleteAll();
 	}
-	void Levels()
+	void Levels(string value)
 	{
 		button.gameObject.GetComponent<AudioSource>().Play();
-		SceneManager.LoadScene(1);
+		SceneManager.LoadScene(value);
 
 	}
 }

@@ -7,6 +7,9 @@ using System.IO;
 public class GameController : MonoBehaviour {
 
 	float moveSpeed = 40;
+	//int score = 1;
+	private int levelAmount = 12;
+	private int currentLevel;
 	public GameSettings gameSettings;
 	//public int index;
 	public Canvas startCanvas;
@@ -24,6 +27,9 @@ public class GameController : MonoBehaviour {
 	void Start() 
     {
 		Debug.Log("restart");
+		//PlayerPrefs.SetInt("Level 2", 1);
+		//PlayerPrefs.SetInt("Level_1_score", score);
+		CheckCurrentLevel();
 		startCanvas.enabled = true;
 		ball = GameObject.FindGameObjectWithTag("Ball");
 		win = goal.gameObject.GetComponentInChildren<AudioSource>();
@@ -39,6 +45,30 @@ public class GameController : MonoBehaviour {
 		}
 		Time.timeScale = 0.0f;
     }
+	void CheckCurrentLevel()
+	{
+		for(int i = 1; i < levelAmount; i++)
+		{
+			if((SceneManager.GetActiveScene().name == "Level "+i))
+			{
+				currentLevel = i;
+				SaveMyGame();
+			}
+		}
+	}
+	void SaveMyGame()
+	{
+		int nextLevel = currentLevel + 1;
+		if(nextLevel < levelAmount + 1)
+		{
+			PlayerPrefs.SetInt("Level "+nextLevel.ToString(),1); //unlock next level
+			//PlayerPrefs.SetInt("Level "+currentLevel.ToString()+"_score",score);
+		}
+	//	else
+	//	{
+			//PlayerPrefs.SetInt("Level "+currentLevel.ToString()+"_score",score);
+	//	}
+	}
 	public void OnCollisionEnter2D(Collision2D coll)
 	{
 		if(coll.gameObject.tag == "Platform")
@@ -135,6 +165,7 @@ public class GameController : MonoBehaviour {
 	public void Home()
 	{
 		GetComponent<AudioSource>().Play();
+		GameSettings.index=0;
 		SceneManager.LoadScene(0);
 	}
 
