@@ -12,7 +12,7 @@ public class GameManager : MonoBehaviour {
 
 	void Start()
 	{
-		if(GameSettings.index>0)
+		if(GameSettings.index == true)
 		{
 			StartLevel();
 		}
