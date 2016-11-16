@@ -52,22 +52,8 @@ public class GameController : MonoBehaviour {
 			if((SceneManager.GetActiveScene().name == "Level "+i))
 			{
 				currentLevel = i;
-				SaveMyGame();
 			}
 		}
-	}
-	void SaveMyGame()
-	{
-		int nextLevel = currentLevel + 1;
-		if(nextLevel < levelAmount + 1)
-		{
-			PlayerPrefs.SetInt("Level "+nextLevel.ToString(),1); //unlock next level
-			//PlayerPrefs.SetInt("Level "+currentLevel.ToString()+"_score",score);
-		}
-	//	else
-	//	{
-			//PlayerPrefs.SetInt("Level "+currentLevel.ToString()+"_score",score);
-	//	}
 	}
 	public void OnCollisionEnter2D(Collision2D coll)
 	{
@@ -98,9 +84,23 @@ public class GameController : MonoBehaviour {
 		GetComponent<AudioSource>().Play();
 		if(startCanvas.gameObject.transform.GetChild(0).gameObject.transform.GetChild(1).gameObject.GetComponent<Text>().enabled == true)
 		{
-			GameSettings.index=+1;
+			SaveMyGame();
+			GameSettings.index = true;
 			SceneManager.LoadScene(0);
 		}
+	}
+	void SaveMyGame()
+	{
+		int nextLevel = currentLevel + 1;
+		if(nextLevel < levelAmount + 1)
+		{
+			PlayerPrefs.SetInt("Level "+nextLevel.ToString(),1); //unlock next level
+			//PlayerPrefs.SetInt("Level "+currentLevel.ToString()+"_score",score);
+		}
+	//	else
+	//	{
+			//PlayerPrefs.SetInt("Level "+currentLevel.ToString()+"_score",score);
+	//	}
 	}
 	public void OnMouse()
 	{
@@ -165,7 +165,7 @@ public class GameController : MonoBehaviour {
 	public void Home()
 	{
 		GetComponent<AudioSource>().Play();
-		GameSettings.index=0;
+		GameSettings.index = false;
 		SceneManager.LoadScene(0);
 	}
 
