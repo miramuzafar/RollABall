@@ -7,6 +7,9 @@ using System.IO;
 public class GameController : MonoBehaviour {
 
 	float moveSpeed = 40;
+	public ParticleSystem ps;
+	public GameObject respawnBall;
+	public ParticleSystem explosion;
 	//int score = 1;
 	private int levelAmount = 12;
 	private int currentLevel;
@@ -20,6 +23,7 @@ public class GameController : MonoBehaviour {
 	public bool active = false;
 	public Rigidbody2D rb;
 	public AudioSource bounce;
+	public float gravity = -1f;
 	public AudioSource win;
 	//AudioSource buttonSound;
 
@@ -30,6 +34,9 @@ public class GameController : MonoBehaviour {
 		//PlayerPrefs.SetInt("Level 2", 1);
 		//PlayerPrefs.SetInt("Level_1_score", score);
 		CheckCurrentLevel();
+		respawnBall = GameObject.FindGameObjectWithTag("Particles");
+		ps = ball.gameObject.GetComponentInChildren<ParticleSystem>();
+		explosion = respawnBall.gameObject.GetComponentInChildren<ParticleSystem>();
 		startCanvas.enabled = true;
 		ball = GameObject.FindGameObjectWithTag("Ball");
 		win = goal.gameObject.GetComponentInChildren<AudioSource>();
@@ -59,7 +66,8 @@ public class GameController : MonoBehaviour {
 	{
 		if(coll.gameObject.tag == "Platform")
 		{
-			if (coll.relativeVelocity.magnitude > 0.2)
+			//Debug.Log(coll.relativeVelocity);
+			if (coll.relativeVelocity.magnitude > 1.5)
             bounce.Play();
 		}
 		if(coll.gameObject.tag == "Goal")
@@ -109,6 +117,9 @@ public class GameController : MonoBehaviour {
 		{
 			//rb.AddForce(new Vector2(moveSpeed,10));
 			rb.AddRelativeForce(new Vector2(moveSpeed,-150));
+			explosion.Play();
+			StartCoroutine(StopParticle());	
+			ps.gravityModifier = gravity;
 			isAlreadyClicked = true;
 			Debug.Log("mousedown");
 			startCanvas.gameObject.transform.GetChild(0).gameObject.SetActive(false);
@@ -121,16 +132,23 @@ public class GameController : MonoBehaviour {
 			StartCoroutine(Restart());		
 		}
 	}
+	public IEnumerator StopParticle()
+	{
+		yield return new WaitForSeconds(1f);
+		explosion.Clear();
+	}
 	public IEnumerator Restart() 
 	{
 		while (true)
 		{
-        	Debug.Log("stopped");
+        	Debug.Log(rb.IsSleeping());
         	//limit the check by 1 per second
         	yield return new WaitForSeconds(1f);
         	if (rb.IsSleeping())
         	{
-            	yield return new WaitForSeconds(2);
+				Debug.Log("stopped");
+            	yield return new WaitForSeconds(1);
+				//rb.Sleep();
             	Debug.Log("lose");
             	SceneManager.LoadScene(SceneManager.GetActiveScene().name);
 				Debug.Log("reset");	
@@ -142,7 +160,7 @@ public class GameController : MonoBehaviour {
 		GetComponent<AudioSource>().Play();
 		pauseButton.gameObject.SetActive(false);
 		startCanvas.gameObject.transform.GetChild(2).gameObject.SetActive(true);
-		startCanvas.gameObject.transform.GetChild(2).gameObject.transform.GetChild(2).gameObject.transform.GetChild(1).gameObject.SetActive(false);
+		startCanvas.gameObject.transform.GetChild(2).gameObject.transform.GetChild(3).gameObject.transform.GetChild(1).gameObject.SetActive(false);
 		Time.timeScale =  0.0f;
 		foreach (GameObject gameObject in GameObject.FindGameObjectsWithTag("Platform"))
 		{
@@ -168,10 +186,14 @@ public class GameController : MonoBehaviour {
 		GameSettings.index = false;
 		SceneManager.LoadScene(0);
 	}
+	public void RestartButton()
+	{
+		SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+	}
 
 	public void Settings()
 	{
 		GetComponent<AudioSource>().Play();
-		startCanvas.gameObject.transform.GetChild(2).gameObject.transform.GetChild(2).gameObject.transform.GetChild(1).gameObject.SetActive(true);
+		startCanvas.gameObject.transform.GetChild(2).gameObject.transform.GetChild(3).gameObject.transform.GetChild(1).gameObject.SetActive(true);
 	}
 }
