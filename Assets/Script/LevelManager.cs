@@ -75,7 +75,7 @@ public class LevelManager : MonoBehaviour {
 			}
 		//}
 	}
-	void DeleteAll()
+	public void DeleteAll()
 	{
 		PlayerPrefs.DeleteAll();
 	}
