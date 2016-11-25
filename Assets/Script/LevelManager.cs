@@ -1,8 +1,6 @@
 ﻿using UnityEngine;
-using System.Collections;
 using UnityEngine.UI;
 using System.Collections.Generic;
-using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 
 public class LevelManager : MonoBehaviour {
@@ -42,7 +40,8 @@ public class LevelManager : MonoBehaviour {
 			button.unlocked = level.unlocked;
 			button.GetComponent<Button>().interactable = level.isInteractable;
 			//Loader.currentLevel = PlayerPrefs.GetInt("Level " + button.levelText.text, button.unlocked);
-			button.GetComponent<Button>().onClick.AddListener(() => Levels("Level " + button.levelText.text));
+			button.GetComponent<Button>().onClick.AddListener(() => Levels(button.levelText.text));
+			//button.GetComponent<Button>().onClick.AddListener(() => Levels(CreateLevel.currentLevel));
 			/*if(PlayerPrefs.GetInt("Level " + button.levelText.text + "_score") > 0 )
 			{
 				button.star1.SetActive(true);
@@ -82,7 +81,9 @@ public class LevelManager : MonoBehaviour {
 	void Levels(string value)
 	{
 		button.gameObject.GetComponent<AudioSource>().Play();
+		CreateLevel.currentLevel = int.Parse(value)-1;
+		//CreateLevel.currentLevel = 0;
+		//GameObject instance = Instantiate(Resources.Load("Level1", typeof(GameObject))) as GameObject;
 		SceneManager.LoadScene(value);
-
 	}
 }
