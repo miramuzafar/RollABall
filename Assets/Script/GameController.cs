@@ -7,6 +7,7 @@ using System.IO;
 public class GameController : MonoBehaviour {
 
 	float moveSpeed = 40;
+	public Vector3[] characterLocation;
 	public ParticleSystem ps;
 	public GameObject respawnBall;
 	public ParticleSystem explosion;
@@ -23,7 +24,6 @@ public class GameController : MonoBehaviour {
 	public bool active = false;
 	public Rigidbody2D rb;
 	public AudioSource bounce;
-	public float gravity = -1f;
 	public AudioSource win;
 	//AudioSource buttonSound;
 
@@ -34,14 +34,16 @@ public class GameController : MonoBehaviour {
 		//PlayerPrefs.SetInt("Level 2", 1);
 		//PlayerPrefs.SetInt("Level_1_score", score);
 		CheckCurrentLevel();
+		GameObject ballTemp = (GameObject)Instantiate(ball,characterLocation[CreateLevel.currentLevel],Quaternion.identity);
+		ball = GameObject.FindGameObjectWithTag("Ball");
 		respawnBall = GameObject.FindGameObjectWithTag("Particles");
-		ps = ball.gameObject.GetComponentInChildren<ParticleSystem>();
+		ps = ballTemp.gameObject.GetComponentInChildren<ParticleSystem>();
 		explosion = respawnBall.gameObject.GetComponentInChildren<ParticleSystem>();
 		startCanvas.enabled = true;
-		ball = GameObject.FindGameObjectWithTag("Ball");
+		//ball = Instantiate(ball,characterLocation[CreateLevel.currentLevel],Quaternion.identity);
 		win = goal.gameObject.GetComponentInChildren<AudioSource>();
-		rb = ball.gameObject.GetComponentInChildren<Rigidbody2D>();
-		bounce = ball.gameObject.GetComponentInChildren<AudioSource>();
+		rb = ballTemp.gameObject.GetComponentInChildren<Rigidbody2D>();
+		bounce = ballTemp.gameObject.GetComponentInChildren<AudioSource>();
 		startCanvas.gameObject.transform.GetChild(0).gameObject.transform.GetChild(0).gameObject.GetComponent<Text>().enabled = true;
 		pauseButton.gameObject.SetActive(false);
 		startCanvas.gameObject.transform.GetChild(2).gameObject.SetActive(false);
@@ -56,6 +58,10 @@ public class GameController : MonoBehaviour {
 	{
 		for(int i = 1; i < levelAmount; i++)
 		{
+		/*	if((SceneManager.GetActiveScene().name == "Level "+i))
+			{
+				currentLevel = i;
+			}*/
 			if((SceneManager.GetActiveScene().name == "Level "+i))
 			{
 				currentLevel = i;
@@ -119,7 +125,7 @@ public class GameController : MonoBehaviour {
 			rb.AddRelativeForce(new Vector2(moveSpeed,-150));
 			explosion.Play();
 			StartCoroutine(StopParticle());	
-			ps.gravityModifier = gravity;
+			ps.Play();
 			isAlreadyClicked = true;
 			Debug.Log("mousedown");
 			startCanvas.gameObject.transform.GetChild(0).gameObject.SetActive(false);
