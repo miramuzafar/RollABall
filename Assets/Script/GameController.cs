@@ -8,23 +8,23 @@ public class GameController : MonoBehaviour {
 
 	float moveSpeed = 40;
 	public Vector3[] characterLocation;
+	public Vector3[] respawnBallLocation;
+	public Vector3[] respawnGoalLocation;
 	public ParticleSystem ps;
+	public ParticleSystem goalEffect;
+	public GameObject goal;
 	public GameObject respawnBall;
 	public ParticleSystem explosion;
 	//int score = 1;
 	private int levelAmount = 12;
 	private int currentLevel;
-	public GameSettings gameSettings;
 	//public int index;
 	public Canvas startCanvas;
 	public Button pauseButton;
 	public GameObject ball;
-	public GameObject goal;
 	public bool isAlreadyClicked = false;
 	public bool active = false;
 	public Rigidbody2D rb;
-	public AudioSource bounce;
-	public AudioSource win;
 	//AudioSource buttonSound;
 
 
@@ -34,16 +34,20 @@ public class GameController : MonoBehaviour {
 		//PlayerPrefs.SetInt("Level 2", 1);
 		//PlayerPrefs.SetInt("Level_1_score", score);
 		CheckCurrentLevel();
-		GameObject ballTemp = (GameObject)Instantiate(ball,characterLocation[CreateLevel.currentLevel],Quaternion.identity);
+		/*characterLocation[currentLevel].z += 0.2127813f;
+		characterLocation[currentLevel].y -=1.081512f;
+		characterLocation[currentLevel].x -=0.313842f;*/
+		GameObject ballTemp = (GameObject)Instantiate(ball,characterLocation[CreateLevel.currentLevel-1],Quaternion.identity);
 		ball = GameObject.FindGameObjectWithTag("Ball");
+		GameObject respawnBallTemp = (GameObject)Instantiate(respawnBall,respawnBallLocation[CreateLevel.currentLevel-1],Quaternion.identity);
 		respawnBall = GameObject.FindGameObjectWithTag("Particles");
+		GameObject goalTemp = (GameObject)Instantiate(goal,respawnGoalLocation[CreateLevel.currentLevel-1],Quaternion.identity);
+		goal = GameObject.FindGameObjectWithTag("Goal");
 		ps = ballTemp.gameObject.GetComponentInChildren<ParticleSystem>();
-		explosion = respawnBall.gameObject.GetComponentInChildren<ParticleSystem>();
+		explosion = respawnBallTemp.gameObject.GetComponentInChildren<ParticleSystem>();
+		goalEffect = goalTemp.gameObject.GetComponentInChildren<ParticleSystem>();
 		startCanvas.enabled = true;
-		//ball = Instantiate(ball,characterLocation[CreateLevel.currentLevel],Quaternion.identity);
-		win = goal.gameObject.GetComponentInChildren<AudioSource>();
 		rb = ballTemp.gameObject.GetComponentInChildren<Rigidbody2D>();
-		bounce = ballTemp.gameObject.GetComponentInChildren<AudioSource>();
 		startCanvas.gameObject.transform.GetChild(0).gameObject.transform.GetChild(0).gameObject.GetComponent<Text>().enabled = true;
 		pauseButton.gameObject.SetActive(false);
 		startCanvas.gameObject.transform.GetChild(2).gameObject.SetActive(false);
@@ -56,40 +60,16 @@ public class GameController : MonoBehaviour {
     }
 	void CheckCurrentLevel()
 	{
+		Debug.Log(CreateLevel.currentLevel);
 		for(int i = 1; i < levelAmount; i++)
 		{
 		/*	if((SceneManager.GetActiveScene().name == "Level "+i))
 			{
 				currentLevel = i;
 			}*/
-			if((SceneManager.GetActiveScene().name == "Level "+i))
+			if((CreateLevel.currentLevel.ToString() == "Level "+i))
 			{
-				currentLevel = i;
-			}
-		}
-	}
-	public void OnCollisionEnter2D(Collision2D coll)
-	{
-		if(coll.gameObject.tag == "Platform")
-		{
-			//Debug.Log(coll.relativeVelocity);
-			if (coll.relativeVelocity.magnitude > 1.5)
-            bounce.Play();
-		}
-		if(coll.gameObject.tag == "Goal")
-		{
-			win.Play();
-			Debug.Log("Level Complete");
-			Time.timeScale = 0.0f;
-			GameObject tempObject = GameObject.Find("StartGame");
-			startCanvas = tempObject.GetComponent<Canvas>();
-			startCanvas.gameObject.transform.GetChild(1).gameObject.SetActive(false);
-			startCanvas.gameObject.transform.GetChild(0).gameObject.SetActive(true);
-		    startCanvas.gameObject.transform.GetChild(0).gameObject.transform.GetChild(0).gameObject.GetComponent<Text>().enabled = false;
-			startCanvas.gameObject.transform.GetChild(0).gameObject.transform.GetChild(1).gameObject.GetComponent<Text>().enabled = true;
-			foreach (GameObject gameObject in GameObject.FindGameObjectsWithTag("Platform"))
-			{
-				gameObject.GetComponent<BoxCollider2D>().enabled = false;
+				CreateLevel.currentLevel = i;
 			}
 		}
 	}
@@ -101,14 +81,18 @@ public class GameController : MonoBehaviour {
 			SaveMyGame();
 			GameSettings.index = true;
 			SceneManager.LoadScene(0);
+			//SceneManager.LoadScene(6);
 		}
 	}
 	void SaveMyGame()
 	{
-		int nextLevel = currentLevel + 1;
+		int nextLevel = CreateLevel.currentLevel + 1;
 		if(nextLevel < levelAmount + 1)
 		{
+			CreateLevel.currentLevel = nextLevel;
 			PlayerPrefs.SetInt("Level "+nextLevel.ToString(),1); //unlock next level
+			Debug.Log(CreateLevel.currentLevel);
+			//nextLevel = CreateLevel.currentLevel++;
 			//PlayerPrefs.SetInt("Level "+currentLevel.ToString()+"_score",score);
 		}
 	//	else
@@ -126,6 +110,7 @@ public class GameController : MonoBehaviour {
 			explosion.Play();
 			StartCoroutine(StopParticle());	
 			ps.Play();
+			goalEffect.Play();
 			isAlreadyClicked = true;
 			Debug.Log("mousedown");
 			startCanvas.gameObject.transform.GetChild(0).gameObject.SetActive(false);
@@ -157,6 +142,7 @@ public class GameController : MonoBehaviour {
 				//rb.Sleep();
             	Debug.Log("lose");
             	SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+				currentLevel = CreateLevel.currentLevel;
 				Debug.Log("reset");	
         	}
     	}
@@ -195,6 +181,7 @@ public class GameController : MonoBehaviour {
 	public void RestartButton()
 	{
 		SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+		currentLevel = CreateLevel.currentLevel;
 	}
 
 	public void Settings()
