@@ -60,12 +60,12 @@ public class LevelManager : MonoBehaviour {
 	}
 	void SaveAll()
 	{
-		//if(PlayerPrefs.HasKey("Level 1"))
-		//{
-			//return;
-		//}
-		//else
-		//{
+		/*if(PlayerPrefs.HasKey("Level 1"))
+		{
+			return;
+		}
+		else
+		{*/
 			GameObject[] allButtons = GameObject.FindGameObjectsWithTag("LevelButton");
 			foreach (GameObject buttons in allButtons)
 			{
@@ -81,9 +81,9 @@ public class LevelManager : MonoBehaviour {
 	void Levels(string value)
 	{
 		button.gameObject.GetComponent<AudioSource>().Play();
-		CreateLevel.currentLevel = int.Parse(value)-1;
+		CreateLevel.currentLevel = int.Parse(value);
 		//CreateLevel.currentLevel = 0;
 		//GameObject instance = Instantiate(Resources.Load("Level1", typeof(GameObject))) as GameObject;
-		SceneManager.LoadScene(value);
+		SceneManager.LoadScene(1);
 	}
 }
