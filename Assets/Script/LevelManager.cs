@@ -12,7 +12,6 @@ public class LevelManager : MonoBehaviour {
 		public string levelText;
 		public int unlocked;
 		public bool isInteractable;
-	//	private int levelIndex;
 	}
 	public List<Level> LevelList;
 	public Transform spacer;
@@ -39,9 +38,7 @@ public class LevelManager : MonoBehaviour {
 			}
 			button.unlocked = level.unlocked;
 			button.GetComponent<Button>().interactable = level.isInteractable;
-			//Loader.currentLevel = PlayerPrefs.GetInt("Level " + button.levelText.text, button.unlocked);
 			button.GetComponent<Button>().onClick.AddListener(() => Levels(button.levelText.text));
-			//button.GetComponent<Button>().onClick.AddListener(() => Levels(CreateLevel.currentLevel));
 			/*if(PlayerPrefs.GetInt("Level " + button.levelText.text + "_score") > 0 )
 			{
 				button.star1.SetActive(true);
@@ -82,8 +79,6 @@ public class LevelManager : MonoBehaviour {
 	{
 		button.gameObject.GetComponent<AudioSource>().Play();
 		CreateLevel.currentLevel = int.Parse(value);
-		//CreateLevel.currentLevel = 0;
-		//GameObject instance = Instantiate(Resources.Load("Level1", typeof(GameObject))) as GameObject;
 		SceneManager.LoadScene(1);
 	}
 }
