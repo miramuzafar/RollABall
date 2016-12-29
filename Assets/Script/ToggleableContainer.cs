@@ -1,10 +1,8 @@
 ﻿using UnityEngine;
-using System.Collections;
 
 public class ToggleableContainer : MonoBehaviour {
 
 	 ToggleableItem _currentSelection;
-     bool isAlreadyClicked = false;
 
     // On initialization, find all toggleable children of this parent.
     void Start() {
@@ -16,8 +14,8 @@ public class ToggleableContainer : MonoBehaviour {
 
     // When one platform is clicked, disable it and re-enable the last selection (if any).
     public void Select(ToggleableItem target) {
-       if(!isAlreadyClicked)//if only one platform can be clicked, or else disable this boolean
-       {
+      // if(!isAlreadyClicked)//if only one platform can be clicked, or else disable this boolean
+      // {
        if(target == _currentSelection)
           return;
 
@@ -29,7 +27,6 @@ public class ToggleableContainer : MonoBehaviour {
             target.gameObject.SetActive(false);
 
         _currentSelection = target;
-        isAlreadyClicked = true;
-        }
+       // }
     }    
 }
