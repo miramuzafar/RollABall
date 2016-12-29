@@ -1,42 +1,44 @@
 ﻿using UnityEngine;
+using System.Collections;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour {
 
 	// Use this for initialization
 	public Canvas levelCanvas;
 	public Canvas menuCanvas;
-	public GameSettings gameSettings;
+	public Image backgroundCanvas;
+	private Transform cameraTransform;
+	private Transform cameraDesiredLookAt;
+	public float speed = 0.01f;
 
 	void Start()
 	{
+		cameraTransform = Camera.main.transform;
+		backgroundCanvas = menuCanvas.gameObject.GetComponent<Image>();
+		backgroundCanvas.enabled = false;
+		Time.timeScale = 1.0f;
 		if(GameSettings.index == true)
 		{
-			StartLevel();
+			StartLevel(levelCanvas.transform);
 		}
 		else
 		{
-			levelCanvas.enabled = false;
-			menuCanvas.enabled = true;
-			menuCanvas.gameObject.transform.GetChild(4).gameObject.SetActive(false);
+			StartLevel(menuCanvas.transform);
 		}
 	}
-	
-	public void StartLevel()
+	void Update()
 	{
-		GetComponent<AudioSource>().Play();
-		Debug.Log("clicked");
-		levelCanvas.enabled = true;
-		menuCanvas.enabled = false;
-		//SceneManager.LoadScene(1);
+		if(cameraDesiredLookAt !=null)
+		{
+			cameraTransform.position = Vector2.Lerp(cameraTransform.position, cameraDesiredLookAt.position,(Mathf.Sin(speed * Time.deltaTime) + 1.0f)/2.0f);
+		}
 	}
-	public void BackButton()
+	public void StartLevel(Transform menuTransform)
 	{
 		GetComponent<AudioSource>().Play();
+		cameraDesiredLookAt = menuTransform;
 		Debug.Log("clicked");
-		levelCanvas.enabled = false;
-		menuCanvas.enabled = true;
-		menuCanvas.gameObject.transform.GetChild(4).gameObject.SetActive(false);
-		//SceneManager.LoadScene(1);
 	}
 	public void ExitGame()
 	{
@@ -44,9 +46,10 @@ public class GameManager : MonoBehaviour {
 		Debug.Log("exit");
 		Application.Quit ();
 	}
-	public void Settings()
+	public void Settings(Animator anim)
 	{
 		GetComponent<AudioSource>().Play();
-		menuCanvas.gameObject.transform.GetChild(4).gameObject.SetActive(true);
+		//backgroundCanvas.enabled = true;
+		anim.SetBool("IsDisplayed", true);
 	}
 }
