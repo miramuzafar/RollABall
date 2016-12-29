@@ -9,6 +9,7 @@ public class Player : MonoBehaviour {
 	public AudioSource win;
 	public GameObject goal;
 	public Canvas startCanvas;
+	public Image backgroundImage;
 	void Start () {
 
 		goal = GameObject.FindGameObjectWithTag("Goal");
@@ -29,8 +30,9 @@ public class Player : MonoBehaviour {
 			goal.GetComponent<AudioSource>().Play();
 			Debug.Log("Level Complete");
 			Time.timeScale = 0.0f;
-			GameObject tempObject = GameObject.Find("StartGame");
+			GameObject tempObject = GameObject.FindGameObjectWithTag("StartGame");
 			startCanvas = tempObject.GetComponent<Canvas>();
+			startCanvas.gameObject.GetComponent<Image>().enabled = true;
 			startCanvas.gameObject.transform.GetChild(1).gameObject.SetActive(false);
 			startCanvas.gameObject.transform.GetChild(0).gameObject.SetActive(true);
 		    startCanvas.gameObject.transform.GetChild(0).gameObject.transform.GetChild(0).gameObject.GetComponent<Text>().enabled = false;
