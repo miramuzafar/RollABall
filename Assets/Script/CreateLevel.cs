@@ -9,9 +9,4 @@ public class CreateLevel : MonoBehaviour {
 	void Start () {
 		GameObject obj = Instantiate(Levels[currentLevel-1]) as GameObject;
 	}
-	
-	// Update is called once per frame
-	void Update () {
-	
-	}
 }
