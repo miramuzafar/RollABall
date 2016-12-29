@@ -18,14 +18,13 @@ public class GameController : MonoBehaviour {
 	//int score = 1;
 	private int levelAmount = 12;
 	private int currentLevel;
-	//public int index;
 	public Canvas startCanvas;
+	public Image backgroundImage;
 	public Button pauseButton;
 	public GameObject ball;
 	public bool isAlreadyClicked = false;
 	public bool active = false;
 	public Rigidbody2D rb;
-	//AudioSource buttonSound;
 
 
 	void Start() 
@@ -34,9 +33,8 @@ public class GameController : MonoBehaviour {
 		//PlayerPrefs.SetInt("Level 2", 1);
 		//PlayerPrefs.SetInt("Level_1_score", score);
 		CheckCurrentLevel();
-		/*characterLocation[currentLevel].z += 0.2127813f;
-		characterLocation[currentLevel].y -=1.081512f;
-		characterLocation[currentLevel].x -=0.313842f;*/
+		backgroundImage = startCanvas.gameObject.GetComponent<Image>();
+		backgroundImage.enabled = true;
 		GameObject ballTemp = (GameObject)Instantiate(ball,characterLocation[CreateLevel.currentLevel-1],Quaternion.identity);
 		ball = GameObject.FindGameObjectWithTag("Ball");
 		GameObject respawnBallTemp = (GameObject)Instantiate(respawnBall,respawnBallLocation[CreateLevel.currentLevel-1],Quaternion.identity);
@@ -63,10 +61,6 @@ public class GameController : MonoBehaviour {
 		Debug.Log(CreateLevel.currentLevel);
 		for(int i = 1; i < levelAmount; i++)
 		{
-		/*	if((SceneManager.GetActiveScene().name == "Level "+i))
-			{
-				currentLevel = i;
-			}*/
 			if((CreateLevel.currentLevel.ToString() == "Level "+i))
 			{
 				CreateLevel.currentLevel = i;
@@ -81,7 +75,6 @@ public class GameController : MonoBehaviour {
 			SaveMyGame();
 			GameSettings.index = true;
 			SceneManager.LoadScene(0);
-			//SceneManager.LoadScene(6);
 		}
 	}
 	void SaveMyGame()
@@ -105,7 +98,7 @@ public class GameController : MonoBehaviour {
 		GetComponent<AudioSource>().Play();
 		if(!isAlreadyClicked)
 		{
-			//rb.AddForce(new Vector2(moveSpeed,10));
+			backgroundImage.enabled = false;
 			rb.AddRelativeForce(new Vector2(moveSpeed,-150));
 			explosion.Play();
 			StartCoroutine(StopParticle());	
@@ -139,7 +132,6 @@ public class GameController : MonoBehaviour {
         	{
 				Debug.Log("stopped");
             	yield return new WaitForSeconds(1);
-				//rb.Sleep();
             	Debug.Log("lose");
             	SceneManager.LoadScene(SceneManager.GetActiveScene().name);
 				currentLevel = CreateLevel.currentLevel;
@@ -151,8 +143,8 @@ public class GameController : MonoBehaviour {
 	{
 		GetComponent<AudioSource>().Play();
 		pauseButton.gameObject.SetActive(false);
+		//backgroundImage.enabled = true;
 		startCanvas.gameObject.transform.GetChild(2).gameObject.SetActive(true);
-		startCanvas.gameObject.transform.GetChild(2).gameObject.transform.GetChild(3).gameObject.transform.GetChild(1).gameObject.SetActive(false);
 		Time.timeScale =  0.0f;
 		foreach (GameObject gameObject in GameObject.FindGameObjectsWithTag("Platform"))
 		{
@@ -164,6 +156,7 @@ public class GameController : MonoBehaviour {
 	{
 		GetComponent<AudioSource>().Play();
 		pauseButton.gameObject.SetActive(true);
+		//backgroundImage.enabled = false;
 		startCanvas.gameObject.transform.GetChild(2).gameObject.SetActive(false);
 		Time.timeScale = 1.0f;
 		foreach (GameObject gameObject in GameObject.FindGameObjectsWithTag("Platform"))
@@ -184,9 +177,9 @@ public class GameController : MonoBehaviour {
 		currentLevel = CreateLevel.currentLevel;
 	}
 
-	public void Settings()
+	public void Settings(Animator anim)
 	{
 		GetComponent<AudioSource>().Play();
-		startCanvas.gameObject.transform.GetChild(2).gameObject.transform.GetChild(3).gameObject.transform.GetChild(1).gameObject.SetActive(true);
+		anim.SetBool("IsDisplayed", true);
 	}
 }
