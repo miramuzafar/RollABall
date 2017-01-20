@@ -7,6 +7,7 @@ using System.IO;
 public class GameController : MonoBehaviour {
 
 	float moveSpeed = 40;
+	float velocity = 2;
 	public Vector3[] characterLocation;
 	public Vector3[] respawnBallLocation;
 	public Vector3[] respawnGoalLocation;
