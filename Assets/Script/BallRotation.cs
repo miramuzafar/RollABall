@@ -22,9 +22,7 @@ public class BallRotation : MonoBehaviour
 		lastPosition = transform.position;
 	}
 	
-	/// <summary>
 	/// Rotate the 3D mesh with quaternions!
-	/// </summary>
 	private void rotateBall()
 	{
 		if (radius == 0) 
@@ -57,19 +55,17 @@ public class BallRotation : MonoBehaviour
 		//				a 3D world space where negative y is down
 		Vector3 ballDown = new Vector3(-1, -1, 0); 
 		
-		// use Cross Product to find the axis of rotation 
-		// https://www.mathsisfun.com/algebra/vectors-cross-product.html
+		// use Cross Product to find the axis of rotation
 		Vector3 axis = Vector3.Cross(ballDown, currentToLast);
 
 		// Cross Product will fail if both vectors are parallel or perpendicular
 		if (axis == Vector3.zero) 
 		{
-			// this should never happen because currentToLast.z is always 0
-			// but who knows where this code will be copy-pasted to...
+			// currentToLast.z is always 0
 			return;
 		}
 
-		// next, the angle theta:
+		// the angle theta:
 
 		// arc length formula
 		// s = r * theta
