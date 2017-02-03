@@ -6,8 +6,7 @@ using System.IO;
 
 public class GameController : MonoBehaviour {
 
-	float moveSpeed = 40;
-	float velocity = 2;
+	public float moveSpeed = 40;
 	public Vector3[] characterLocation;
 	public Vector3[] respawnBallLocation;
 	public Vector3[] respawnGoalLocation;
@@ -30,6 +29,7 @@ public class GameController : MonoBehaviour {
 
 	void Start() 
     {
+		Time.timeScale = 0.0f;
 		Debug.Log("restart");
 		//PlayerPrefs.SetInt("Level 2", 1);
 		//PlayerPrefs.SetInt("Level_1_score", score);
@@ -55,7 +55,6 @@ public class GameController : MonoBehaviour {
 		{
 			gameObject.GetComponent<BoxCollider2D>().enabled = false;
 		}
-		Time.timeScale = 0.0f;
     }
 	void CheckCurrentLevel()
 	{
@@ -100,6 +99,7 @@ public class GameController : MonoBehaviour {
 		if(!isAlreadyClicked)
 		{
 			backgroundImage.enabled = false;
+			Time.timeScale = 1.0f;
 			rb.AddRelativeForce(new Vector2(moveSpeed,-150));
 			explosion.Play();
 			StartCoroutine(StopParticle());	
@@ -107,15 +107,16 @@ public class GameController : MonoBehaviour {
 			goalEffect.Play();
 			isAlreadyClicked = true;
 			Debug.Log("mousedown");
+			Debug.Log(moveSpeed);
 			startCanvas.gameObject.transform.GetChild(0).gameObject.SetActive(false);
 			pauseButton.gameObject.SetActive(true);
-			Time.timeScale = 1.0f;
 			foreach (GameObject gameObject in GameObject.FindGameObjectsWithTag("Platform"))
 			{
 				gameObject.GetComponent<BoxCollider2D>().enabled = true;
 			}
 			StartCoroutine(Restart());		
 		}
+		//isAlreadyClicked = true;
 	}
 	public IEnumerator StopParticle()
 	{
@@ -126,6 +127,7 @@ public class GameController : MonoBehaviour {
 	{
 		while (true)
 		{
+			Debug.Log(rb.velocity);
         	Debug.Log(rb.IsSleeping());
         	//limit the check by 1 per second
         	yield return new WaitForSeconds(1f);
