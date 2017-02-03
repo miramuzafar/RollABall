@@ -29,12 +29,14 @@ public class Player : MonoBehaviour {
 		}
 		if(coll.gameObject.tag == "Goal")
 		{
+			goal.GetComponent<SpriteRenderer>().enabled = false;
 			StartCoroutine(Explode());
 		}
 	}
 	public IEnumerator Explode()
 	{
 		Instantiate(rockParticle, goal.transform.position, goal.transform.rotation);
+		goal.gameObject.SetActive(false);
 		yield return new WaitForSeconds(2f);
 		goal.GetComponent<AudioSource>().Play();
 		Debug.Log("Level Complete");
