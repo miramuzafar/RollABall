@@ -29,7 +29,6 @@ public class Player : MonoBehaviour {
 		}
 		if(coll.gameObject.tag == "Goal")
 		{
-			goal.GetComponent<SpriteRenderer>().enabled = false;
 			StartCoroutine(Explode());
 		}
 	}
