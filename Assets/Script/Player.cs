@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
+using System.Collections;
 
 public class Player : MonoBehaviour {
 
@@ -10,6 +11,7 @@ public class Player : MonoBehaviour {
 	public GameObject goal;
 	public Canvas startCanvas;
 	public Image backgroundImage;
+	public GameObject rockParticle;
 	void Start () {
 
 		goal = GameObject.FindGameObjectWithTag("Goal");
@@ -27,20 +29,26 @@ public class Player : MonoBehaviour {
 		}
 		if(coll.gameObject.tag == "Goal")
 		{
-			goal.GetComponent<AudioSource>().Play();
-			Debug.Log("Level Complete");
-			Time.timeScale = 0.0f;
-			GameObject tempObject = GameObject.FindGameObjectWithTag("StartGame");
-			startCanvas = tempObject.GetComponent<Canvas>();
-			startCanvas.gameObject.GetComponent<Image>().enabled = true;
-			startCanvas.gameObject.transform.GetChild(1).gameObject.SetActive(false);
-			startCanvas.gameObject.transform.GetChild(0).gameObject.SetActive(true);
-		    startCanvas.gameObject.transform.GetChild(0).gameObject.transform.GetChild(0).gameObject.GetComponent<Text>().enabled = false;
-			startCanvas.gameObject.transform.GetChild(0).gameObject.transform.GetChild(1).gameObject.GetComponent<Text>().enabled = true;
-			foreach (GameObject gameObject in GameObject.FindGameObjectsWithTag("Platform"))
-			{
-				gameObject.GetComponent<BoxCollider2D>().enabled = false;
-			}
+			StartCoroutine(Explode());
+		}
+	}
+	public IEnumerator Explode()
+	{
+		Instantiate(rockParticle, goal.transform.position, goal.transform.rotation);
+		yield return new WaitForSeconds(2f);
+		goal.GetComponent<AudioSource>().Play();
+		Debug.Log("Level Complete");
+		Time.timeScale = 0.0f;
+		GameObject tempObject = GameObject.FindGameObjectWithTag("StartGame");
+		startCanvas = tempObject.GetComponent<Canvas>();
+		startCanvas.gameObject.GetComponent<Image>().enabled = true;
+		startCanvas.gameObject.transform.GetChild(1).gameObject.SetActive(false);
+		startCanvas.gameObject.transform.GetChild(0).gameObject.SetActive(true);
+		startCanvas.gameObject.transform.GetChild(0).gameObject.transform.GetChild(0).gameObject.GetComponent<Text>().enabled = false;
+		startCanvas.gameObject.transform.GetChild(0).gameObject.transform.GetChild(1).gameObject.GetComponent<Text>().enabled = true;
+		foreach (GameObject gameObject in GameObject.FindGameObjectsWithTag("Platform"))
+		{
+			gameObject.GetComponent<BoxCollider2D>().enabled = false;
 		}
 	}
 }
