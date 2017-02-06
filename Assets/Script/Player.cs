@@ -11,11 +11,13 @@ public class Player : MonoBehaviour {
 	public GameObject goal;
 	public Canvas startCanvas;
 	public Image backgroundImage;
+	public ParticleSystem fireBall;
 	public GameObject rockParticle;
 	void Start () {
 
 		goal = GameObject.FindGameObjectWithTag("Goal");
 		bounce = gameObject.GetComponentInChildren<AudioSource>();
+		fireBall.gameObject.SetActive(true);
 	}
 	
 	public void OnCollisionEnter2D(Collision2D coll)
@@ -35,6 +37,8 @@ public class Player : MonoBehaviour {
 	public IEnumerator Explode()
 	{
 		Instantiate(rockParticle, goal.transform.position, goal.transform.rotation);
+		gameObject.GetComponent<SpriteRenderer>().enabled = false;
+		fireBall.gameObject.SetActive(false);
 		goal.gameObject.SetActive(false);
 		yield return new WaitForSeconds(2f);
 		goal.GetComponent<AudioSource>().Play();
