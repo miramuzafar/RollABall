@@ -1,7 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
-using System.Collections;
 
 public class Player : MonoBehaviour {
 
@@ -12,12 +11,14 @@ public class Player : MonoBehaviour {
 	public Canvas startCanvas;
 	public Image backgroundImage;
 	public ParticleSystem fireBall;
+	public ParticleSystem sparks;
 	public GameObject rockParticle;
 	void Start () {
 
 		goal = GameObject.FindGameObjectWithTag("Goal");
 		bounce = gameObject.GetComponentInChildren<AudioSource>();
 		fireBall.gameObject.SetActive(true);
+		sparks.gameObject.SetActive(true);
 	}
 	
 	public void OnCollisionEnter2D(Collision2D coll)
@@ -39,8 +40,11 @@ public class Player : MonoBehaviour {
 		Instantiate(rockParticle, goal.transform.position, goal.transform.rotation);
 		gameObject.GetComponent<SpriteRenderer>().enabled = false;
 		fireBall.gameObject.SetActive(false);
-		goal.gameObject.SetActive(false);
-		yield return new WaitForSeconds(2f);
+		sparks.gameObject.SetActive(false);
+		goal.gameObject.transform.GetChild(0).gameObject.SetActive(false);
+		goal.gameObject.GetComponent<SpriteRenderer>().enabled = false;
+		goal.gameObject.GetComponent<BoxCollider2D>().enabled = false;
+		yield return new WaitForSeconds(3f);
 		goal.GetComponent<AudioSource>().Play();
 		Debug.Log("Level Complete");
 		Time.timeScale = 0.0f;
