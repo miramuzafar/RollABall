@@ -43,3 +43,7 @@ Thumbs.db
 *.xml
 *.userprefs
 *.sln
+*.o
+*.bc
+Library/
+Temp/
